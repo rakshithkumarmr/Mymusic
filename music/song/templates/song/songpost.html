@@ -1,0 +1,64 @@
+{% extends 'song/basic.html' %}
+{% block title %}
+
+
+{% endblock %}
+{% block body %}
+     {% if message %}
+    <script>
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title:'{{ message }}',
+            showConfirmButton: false,
+            timer: 1500
+            })
+    </script>
+    {% endif %}
+{% load static %}
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6" style="padding-top: 4%;padding-left: 10%">
+                <img src="{{ song.image.url }}" width="400" height="300">
+            </div>
+            <div class="col-md-6">
+                <h2 style="padding-top: 6%;font-weight: bold;color: red">Song :{{ song.name }}</h2>
+                <h6 style="padding-top: 2%;font-weight: bold">Category  :{{ song.tags }}</h6>
+                <h6 style="padding-top: 2%;font-weight: bold">Movie  :{{ song.movie_name }}</h6>
+                <h6 style="padding-top: 2%;font-weight: bold">Singer  :{{ song.singer }}</h6>
+                <div>
+                <h6 style="padding-top: 2%;font-weight: bold">Play :</h6>
+                <audio controls style="background-color: black">
+                     <source src="{{ song.song.url }}" type="audio/mp3" >
+                </audio></div>
+                <div style="padding-top: 2%">
+                    <div class="row">
+                        {% if user.is_authenticated %}
+                        <form action="{% url 'listen_later' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger">Watchlist</button>
+                            <input type="hidden" value="{{ song.song_id }}" name="song">
+                        </form>
+                        {% else %}
+                            <button class="btn btn-outline-danger" onclick="login()">Watchlist</button>
+                            <script>
+                            function login() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Please Login !',
+                                })}
+                            </script>
+                        {% endif %}
+                        <a href="{{ song.song.url }}" download style="padding-left: 2%">
+                            <button class="btn btn-outline-danger">Download Song</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

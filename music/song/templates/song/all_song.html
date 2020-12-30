@@ -1,0 +1,41 @@
+{% extends 'song/basic.html' %}
+{% block title %}Allsong{% endblock %}
+{% block body %}
+{% load static %}
+
+
+<h2 style="margin-left: 13%;padding-top: 2%;font-family: 'Lemonada', cursive;color: #0d0f91">All Songs</h2>
+   <div class="row" style="margin-left: 10%">
+       {% for x in song %}
+        <div class="card" style="width: 18rem;margin-left: 5%">
+            <img src="{{ x.image.url }}" class="card-img-top" alt="..." width="800" height="200">
+                <div class="card-body">
+                    <h3 class="card-title" style="font-weight: bold;color: red">{{x.name  }}</h3>
+                    <h6 style="font-weight: bold">Category  :{{ x.tags }}</h6>
+                    <h6 style="font-weight: bold">Movie  :{{ x.movie_name }}</h6>
+                    <h6 style="font-weight: bold">Singer  :{{ x.singer }}</h6>
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'history' %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="audio_id" value="{{ x.song_id }}">
+                        <button type="submit" class="btn btn-outline-danger">Listen Song</button>
+                    </form>
+                    {% else %}
+                        <a href="/songpost/{{ x.song_id }}/" class="btn btn-outline-danger">Listen Song</a>
+                    {% endif %}
+                </div>
+        </div>
+        {% endfor %}
+   </div>
+    <br>
+   <div style="margin-left: 20%">
+   <ul class="pagination">
+    {% for x in paginator.page_range %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ x }}">{{ x }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+
+   </div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+                                                                                                                  {% extends 'song/basic.html' %}
+{% block title %}Allsong{% endblock %}
+{% block body %}
+{% load static %}
+ {% if mess %}
+    <script>
+        Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: '{{ mess }}',
+        })
+    </script>
+ {% endif %}
+ {% if messages %}
+    {% for x in messages %}
+    <script>
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title:'{{ x }}',
+            showConfirmButton: false,
+            timer: 1500
+            })
+    </script>
+    {% endfor %}
+{% endif %}
+        <h2 style="margin-left: 13%;padding-top: 2%;font-family: 'Lemonada', cursive;color: red">Upload Your Music</h2>
+        <div class="container my-3" style="padding-top: 1%">
+    <form method="post" action="{% url 'upload_music' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group" >
+            <label for="exampleInputEmail1" style="font-weight: bold">Your Music Name :</label>
+            <input type="text" class="form-control" id="exampleInputEmail1"  name="name" required>
+        </div>
+        <div class="form-group" >
+            <label for="exampleInputEmail1" style="font-weight: bold">Singer Name :</label>
+            <input type="text" class="form-control" id="exampleInputEmail1"  name="singer" required>
+        </div>
+        <div class="form-group" >
+            <label for="exampleInputEmail1" style="font-weight: bold">Tags :</label>
+            <input type="text" class="form-control" id="exampleInputEmail1"  name="tag" required>
+        </div>
+        <div class="form-group" >
+            <label for="exampleInputEmail1" style="font-weight: bold">Image : ( Associated With Your Music)</label>
+            <input type="file" class="form-control" id="exampleInputEmail1"  name="image" required>
+        </div>
+        <div class="form-group" >
+            <label for="exampleInputEmail1" style="font-weight: bold">Movie Name :</label>
+            <input type="text" class="form-control" id="exampleInputEmail1"  name="moviename" required>
+        </div>
+        <div class="form-group" >
+            <label for="exampleInputEmail1" style="font-weight: bold">Song : ( Associated With Your Music</label>
+            <input type="file" class="form-control" id="exampleInputEmail1"  name="song" required>
+        </div>
+        <div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+    </div>
+
+{% endblock %}

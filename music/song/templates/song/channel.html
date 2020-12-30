@@ -1,0 +1,47 @@
+{% extends 'song/basic.html' %}
+{% block title %}Allsong{% endblock %}
+{% block body %}
+{% load static %}
+{% if messages %}
+    {% for x in messages %}
+    <script>
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title:'{{ x }}',
+            showConfirmButton: false,
+            timer: 1500
+            })
+    </script>
+    {% endfor %}
+{% endif %}
+        <h2 style="margin-left: 15%;padding-top: 2%;font-family: 'Lemonada', cursive;color: #0d0f91">Channel : {{ channel }}</h2>
+        <div class="row" style="margin-left: 10%">
+        {% if song|length < 1 %}
+            <h4 style="text-align: center;margin-left: 15%;padding-top: 2%;font-family: 'Lemonada', cursive;color: red">You don't have any songs in your Channel .</h4>
+        {% else %}
+            {% for z in song %}
+                {% for x in  z.values %}
+                    {{ x.image }}
+                    <div class="card" style="width: 18rem;margin-left: 5%">
+                        <img src="{{ x.image.url }}" class="card-img-top" alt="..." width="800" height="200">
+                            <div class="card-body">
+                                <h3 class="card-title" style="font-weight: bold;color: red">{{x.name  }}</h3>
+                                <h6 style="font-weight: bold">Category  :{{ x.tags }}</h6>
+                                <h6 style="font-weight: bold">Movie  :{{ x.movie_name }}</h6>
+                                <h6 style="font-weight: bold">Singer  :{{ x.singer }}</h6>
+                                    {% if user.is_authenticated %}
+                                        <form action="{% url 'history' %}" method="post">{% csrf_token %}
+                                            <input type="hidden" name="audio_id" value="{{ x.song_id }}">
+                                            <button type="submit" class="btn btn-outline-danger">Listen Song</button>
+                                            <a href="/channel_song_delete/{{ x.song_id }}/" class="btn btn-outline-danger" style="margin-left: 2%">Remove</a>
+                                        </form>
+                                    {% endif %}
+                            </div>
+                    </div>
+                {% endfor %}
+        {% endfor %}
+    </div>
+
+{% endif %}
+{% endblock %}
